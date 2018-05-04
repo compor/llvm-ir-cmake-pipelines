@@ -1,4 +1,4 @@
-# LLVM IR CMake Pipeline
+# LLVM IR CMake Pipelines
 
 ## Introduction
 
