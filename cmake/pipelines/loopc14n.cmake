@@ -79,9 +79,6 @@ function(loopc14n_pipeline)
     DEPENDS ${PIPELINE_PREFIX}_link)
   add_dependencies(${PIPELINE_PREFIX}_bc_exe ${PIPELINE_PREFIX}_link)
 
-  # TODO see if this is needed
-  #target_link_libraries(${PIPELINE_PREFIX}_bc_exe m)
-
   # aggregate targets for pipeline
 
   add_custom_target(${PIPELINE_SUBTARGET} DEPENDS
