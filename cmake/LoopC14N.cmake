@@ -1,22 +1,8 @@
 # cmake file
 
-macro(LoopC14NPipelineSetupNames)
+function(LoopC14NPipeline trgt)
   set(PIPELINE_NAME "LoopC14N")
   set(PIPELINE_INSTALL_TARGET "${PIPELINE_NAME}-install")
-endmacro()
-
-macro(LoopC14NPipelineSetup)
-  LoopC14NPipelineSetupNames()
-
-  message(STATUS "setting up pipeline ${PIPELINE_NAME}")
-endmacro()
-
-LoopC14NPipelineSetup()
-
-#
-
-function(LoopC14NPipeline trgt)
-  LoopC14NPipelineSetupNames()
 
   if(NOT TARGET ${PIPELINE_NAME})
     add_custom_target(${PIPELINE_NAME})
