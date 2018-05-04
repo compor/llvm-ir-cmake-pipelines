@@ -2,8 +2,8 @@
 
 include(CMakeParseArguments)
 
-function(LoopC14NPipeline)
-  set(PIPELINE_NAME "LoopC14N")
+function(loopc14n_pipeline)
+  set(PIPELINE_NAME "loopc14n")
   string(TOUPPER "${PIPELINE_NAME}" PIPELINE_NAME_UPPER)
 
   set(options ALL)
