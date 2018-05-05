@@ -1,0 +1,4 @@
+
+  ${pipeline}(DEPENDS $${${depends}}
+      MAIN_TARGET ${output_target})
+

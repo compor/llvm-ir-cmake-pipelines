@@ -1,0 +1,33 @@
+# cmake file
+
+include(CMakeParseArguments)
+
+function(${pipeline})
+  set(PIPELINE_NAME "${pipeline}")
+  string(TOUPPER "$${PIPELINE_NAME}" PIPELINE_NAME_UPPER)
+
+  set(options)
+  set(oneValueArgs DEPENDS)
+  set(multiValueArgs)
+  cmake_parse_arguments($${PIPELINE_NAME_UPPER}
+    "$${options}" "$${oneValueArgs}" "$${multiValueArgs}" $${ARGN})
+
+  set(TRGT $${$${PIPELINE_NAME_UPPER}_DEPENDS})
+
+  # argument checks
+
+  if(NOT TRGT)
+    message(FATAL_ERROR "pipeline $${PIPELINE_NAME}: missing DEPENDS target")
+  endif()
+
+  if(NOT TARGET $${TRGT})
+    message(FATAL_ERROR "pipeline $${PIPELINE_NAME}: $${TRGT} is not a target")
+  endif()
+
+  if($${PIPELINE_NAME_UPPER}_UNPARSED_ARGUMENTS)
+    message(FATAL_ERROR "pipeline $${PIPELINE_NAME}: has extraneous arguments \
+    $${$${PIPELINE_NAME_UPPER}_UNPARSED_ARGUMENTS}")
+  endif()
+
+  ###
+
