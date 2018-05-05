@@ -33,10 +33,18 @@ class PipelineGenerator:
         }
 
         pipelines = kwargs[self.middle_placeholder].split(';')
+
+        middle_subs['pipeline'] = pipelines[0]
+        middle_subs['depends'] = 'TRGT0'
+        middle_subs['output_target'] = 'OUT_TRGT0'
+        text += self.middle.substitute(middle_subs)
+
+        pipelines = pipelines[1:]
+
         for i, pline in enumerate(pipelines):
             middle_subs['pipeline'] = pline
-            middle_subs['depends'] = 'TRGT{}'.format(i)
-            middle_subs['output_target'] = 'OUT_TRGT{}'.format(i)
+            middle_subs['depends'] = 'OUT_TRGT{}'.format(i)
+            middle_subs['output_target'] = 'OUT_TRGT{}'.format(i + 1)
             text += self.middle.substitute(middle_subs)
 
         text += self.postamble.substitute(
