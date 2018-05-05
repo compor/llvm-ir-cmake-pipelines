@@ -16,9 +16,7 @@ class PipelineGenerator:
         self.postamble = Template(postamble)
 
     def generate(self, **kwargs):
-        pass
-
-    # print template.substitute(kwargs)
+        print(self.preamble.substitute(kwargs))
 
 
 if __name__ == '__main__':
@@ -29,12 +27,6 @@ if __name__ == '__main__':
         required=True,
         help='path to the template dir')
     parser.add_argument(
-        '-f',
-        type=FileType('w'),
-        dest='file',
-        required=True,
-        help='file name of output')
-    parser.add_argument(
         '-c',
         dest='compound_pipeline',
         required=True,
@@ -44,6 +36,8 @@ if __name__ == '__main__':
         dest='pipelines',
         required=True,
         help='semicolon-separated list of pipelines')
+    parser.add_argument(
+        '-f', type=FileType('w'), dest='file', help='file name of output')
 
     args = vars(parser.parse_args())
 
@@ -59,3 +53,6 @@ if __name__ == '__main__':
     postamble = open(fname).read()
 
     g = PipelineGenerator(preamble, middle, postamble)
+
+    if not args['file']:
+        g.generate(compound_pipeline='p1')
