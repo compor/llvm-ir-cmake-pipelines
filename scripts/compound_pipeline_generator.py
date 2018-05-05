@@ -4,6 +4,10 @@ from argparse import ArgumentParser, FileType
 from os import path
 from string import Template
 
+PREAMBLE_FILENAME = 'preamble.cmake.in'
+MIDDLE_FILENAME = 'middle.cmake.in'
+POSTAMBLE_FILENAME = 'postamble.cmake.in'
+
 
 class PipelineGenerator:
     def __init__(self, preamble, postamble, middle):
@@ -45,11 +49,11 @@ if __name__ == '__main__':
 
     #
 
-    fname = path.abspath(args['templatedir'] + '/preamble.cmake.in')
+    fname = path.abspath(args['templatedir'] + '/' + PREAMBLE_FILENAME)
     preamble = open(fname).read()
 
-    fname = path.abspath(args['templatedir'] + '/middle.cmake.in')
+    fname = path.abspath(args['templatedir'] + '/' + MIDDLE_FILENAME)
     middle = open(fname).read()
 
-    fname = path.abspath(args['templatedir'] + '/postamble.cmake.in')
+    fname = path.abspath(args['templatedir'] + '/' + POSTAMBLE_FILENAME)
     postamble = open(fname).read()
