@@ -12,16 +12,17 @@ function(${compound_pipeline})
   cmake_parse_arguments($${PIPELINE_NAME_UPPER}
     "$${options}" "$${oneValueArgs}" "$${multiValueArgs}" $${ARGN})
 
-  set(TRGT $${$${PIPELINE_NAME_UPPER}_DEPENDS})
+  set(TRGT0 $${$${PIPELINE_NAME_UPPER}_DEPENDS})
 
   # argument checks
 
-  if(NOT TRGT)
+  if(NOT TRGT0)
     message(FATAL_ERROR "pipeline $${PIPELINE_NAME}: missing DEPENDS target")
   endif()
 
-  if(NOT TARGET $${TRGT})
-    message(FATAL_ERROR "pipeline $${PIPELINE_NAME}: $${TRGT} is not a target")
+  if(NOT TARGET $${TRGT0})
+    message(FATAL_ERROR "pipeline $${PIPELINE_NAME}: $${TRGT0} is not a \
+    target")
   endif()
 
   if($${PIPELINE_NAME_UPPER}_UNPARSED_ARGUMENTS)
