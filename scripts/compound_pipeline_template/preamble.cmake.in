@@ -2,8 +2,8 @@
 
 include(CMakeParseArguments)
 
-function(${pipeline})
-  set(PIPELINE_NAME "${pipeline}")
+function(${compound_pipeline})
+  set(PIPELINE_NAME "${compound_pipeline}")
   string(TOUPPER "$${PIPELINE_NAME}" PIPELINE_NAME_UPPER)
 
   set(options)
