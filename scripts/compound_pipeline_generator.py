@@ -32,17 +32,17 @@ if __name__ == '__main__':
         '-f',
         type=FileType('w'),
         dest='file',
-        # required=True,
+        required=True,
         help='file name of output')
     parser.add_argument(
         '-c',
         dest='compound_pipeline',
-        # required=True,
+        required=True,
         help='name of compound pipeline')
     parser.add_argument(
         '-p',
         dest='pipelines',
-        # required=True,
+        required=True,
         help='semicolon-separated list of pipelines')
 
     args = vars(parser.parse_args())
