@@ -20,11 +20,15 @@ class PipelineGenerator:
         self.postamble = Template(postamble)
 
     def generate(self, **kwargs):
-        print(
-            self.preamble.substitute({
-                k: kwargs[k]
-                for k in kwargs if k in self.preamble_placeholders
-            }))
+        text = self.preamble.substitute(
+            {k: kwargs[k]
+             for k in kwargs if k in self.preamble_placeholders})
+
+        text += self.postamble.substitute(
+            {k: kwargs[k]
+             for k in kwargs if k in self.postamble_placeholders})
+
+        return text
 
 
 if __name__ == '__main__':
