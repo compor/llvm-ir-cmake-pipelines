@@ -10,13 +10,21 @@ POSTAMBLE_FILENAME = 'postamble.cmake.in'
 
 
 class PipelineGenerator:
+    preamble_placeholders = {'compound_pipeline'}
+    middle_placeholders = {'pipeline', 'depends', 'out_target'}
+    postamble_placeholders = {}
+
     def __init__(self, preamble, middle, postamble):
         self.preamble = Template(preamble)
         self.middle = Template(middle)
         self.postamble = Template(postamble)
 
     def generate(self, **kwargs):
-        print(self.preamble.substitute(kwargs))
+        print(
+            self.preamble.substitute({
+                k: kwargs[k]
+                for k in kwargs if k in self.preamble_placeholders
+            }))
 
 
 if __name__ == '__main__':
@@ -55,4 +63,4 @@ if __name__ == '__main__':
     g = PipelineGenerator(preamble, middle, postamble)
 
     if not args['file']:
-        g.generate(compound_pipeline='p1')
+        g.generate(compound_pipeline=args['compound_pipeline'])
