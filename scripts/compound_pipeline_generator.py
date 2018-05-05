@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+import sys
+
 from argparse import ArgumentParser, FileType
 from os import path
 from string import Template
@@ -65,6 +67,10 @@ if __name__ == '__main__':
     postamble = open(fname).read()
 
     g = PipelineGenerator(preamble, middle, postamble)
+    txt = g.generate(compound_pipeline=args['compound_pipeline'])
 
-    if not args['file']:
-        g.generate(compound_pipeline=args['compound_pipeline'])
+    outfile = args['file']
+    if not outfile:
+        outfile = sys.stdout
+
+    outfile.write(txt)
