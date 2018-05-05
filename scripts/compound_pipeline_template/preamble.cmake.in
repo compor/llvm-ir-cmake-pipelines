@@ -30,4 +30,3 @@ function(${compound_pipeline})
   endif()
 
   ###
-
