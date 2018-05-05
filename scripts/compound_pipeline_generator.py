@@ -10,10 +10,10 @@ POSTAMBLE_FILENAME = 'postamble.cmake.in'
 
 
 class PipelineGenerator:
-    def __init__(self, preamble, postamble, middle):
+    def __init__(self, preamble, middle, postamble):
         self.preamble = Template(preamble)
-        self.postamble = Template(postamble)
         self.middle = Template(middle)
+        self.postamble = Template(postamble)
 
     def generate(self, **kwargs):
         pass
@@ -57,3 +57,5 @@ if __name__ == '__main__':
 
     fname = path.abspath(args['templatedir'] + '/' + POSTAMBLE_FILENAME)
     postamble = open(fname).read()
+
+    g = PipelineGenerator(preamble, middle, postamble)
