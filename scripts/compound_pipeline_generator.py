@@ -87,6 +87,10 @@ class CMakeCompoundPipelineGenerator:
         ph = next(iter(self.middle_placeholders))
         pipelines = kwargs[ph].split(';')
 
+        for e in pipelines:
+            if not len(e):
+                raise ValueError('Pipeline name is empty')
+
         middle_subs['pipeline'] = pipelines[0]
         middle_subs['depends'] = 'TRGT0'
         middle_subs['output_target'] = 'OUT_TRGT0'
