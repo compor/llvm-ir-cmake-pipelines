@@ -71,6 +71,8 @@ class CMakeCompoundPipelineGenerator:
         :param kwargs: The required mappings for the template placeholders.
 
         :return string: The substituted text.
+
+        :raises: :class:`ValueError`, :class:`KeyError`
         """
         text = self.preamble.substitute(
             {k: kwargs[k]
