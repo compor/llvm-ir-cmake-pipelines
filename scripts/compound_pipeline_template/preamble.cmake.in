@@ -16,6 +16,10 @@ function(${compound_pipeline})
 
   # argument checks
 
+  #
+  # TRGT0 is the entry point target for the compound pipeline
+  #
+
   if(NOT TRGT0)
     message(FATAL_ERROR "pipeline $${PIPELINE_NAME}: missing DEPENDS target")
   endif()
