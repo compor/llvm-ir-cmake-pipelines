@@ -136,7 +136,6 @@ if __name__ == '__main__':
         help='Semicolon-separated list of pipelines')
     parser.add_argument(
         '-f',
-        type=FileType('w'),
         dest='file',
         help='File name of output. Use stdout if not specified')
 
@@ -158,8 +157,8 @@ if __name__ == '__main__':
         compound_pipeline=args['compound_pipeline'],
         pipelines=args['pipelines'])
 
-    outfile = args['file']
-    if not outfile:
-        outfile = sys.stdout
+    outfile = sys.stdout
+    if args['file']:
+        outfile = open(args['file'], 'w')
 
     outfile.write(txt)
