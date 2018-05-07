@@ -43,14 +43,14 @@ class CMakeCompoundPipelineGenerator:
     data attributes:
 
         - preamble_placeholders
-        - middle_placeholder
-        - postamble_placehodlers
+        - middle_placeholders
+        - postamble_placeholders
 
     The templating used is based on Python's :class:`string.Template`.
     """
 
     preamble_placeholders = frozenset(['compound_pipeline'])
-    middle_placeholder = 'pipelines'
+    middle_placeholders = frozenset(['pipelines'])
     postamble_placeholders = frozenset()
 
     def __init__(self, preamble, middle, postamble):
@@ -82,7 +82,8 @@ class CMakeCompoundPipelineGenerator:
             'output_target': None
         }
 
-        pipelines = kwargs[self.middle_placeholder].split(';')
+        ph = next(iter(self.middle_placeholders))
+        pipelines = kwargs[ph].split(';')
 
         middle_subs['pipeline'] = pipelines[0]
         middle_subs['depends'] = 'TRGT0'
