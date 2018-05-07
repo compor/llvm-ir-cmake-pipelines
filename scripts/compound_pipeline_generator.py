@@ -19,9 +19,9 @@ from argparse import ArgumentParser, FileType
 from os import path
 from string import Template
 
-PREAMBLE_FILENAME = 'preamble.cmake.in'
-MIDDLE_FILENAME = 'middle.cmake.in'
-POSTAMBLE_FILENAME = 'postamble.cmake.in'
+PREAMBLE_FILENAME = 'compound.preamble.cmake.in'
+MIDDLE_FILENAME = 'compound.middle.cmake.in'
+POSTAMBLE_FILENAME = 'compound.postamble.cmake.in'
 
 
 class CMakeCompoundPipelineGenerator:
