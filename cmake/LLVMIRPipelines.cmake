@@ -29,3 +29,23 @@ else()
   message(WARNING "No pipelines included")
 endif()
 
+
+#
+
+
+if(LLVMIR_COMPOUND_PIPELINES)
+  foreach(CPLINE ${LLVMIR_COMPOUND_PIPELINES})
+    string(TOUPPER "${CPLINE}" CPLINE)
+    set(CPLINE_PARTS "LLVMIR_COMPOUND_PIPELINE_${CPLINE}")
+
+    if(NOT DEFINED ${CPLINE_PARTS})
+      message(FATAL_ERROR "pipeline ${CPLINE_PARTS} is not defined!")
+    endif()
+
+    set(CPLINE_PARTS_CONTENTS "${${CPLINE_PARTS}}")
+
+    message(STATUS "+++++${CPLINE_PARTS}=${CPLINE_PARTS_CONTENTS}")
+
+    # generate stuff here
+  endforeach()
+endif()
