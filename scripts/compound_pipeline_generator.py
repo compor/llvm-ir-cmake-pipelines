@@ -20,7 +20,7 @@ from os import path
 from string import Template
 
 PREAMBLE_FILENAME = 'compound.preamble.cmake.in'
-MIDDLE_FILENAME = 'compound.middle.cmake.in'
+REPEAT_FILENAME = 'compound.repeat.cmake.in'
 POSTAMBLE_FILENAME = 'compound.postamble.cmake.in'
 
 
@@ -31,38 +31,38 @@ class CMakeCompoundPipelineGenerator:
     generate a CMake lists file. The template parts are:
 
         - a preamble template
-        - a middle template
+        - a repeat template
         - a postamble template
 
     The preamble and postamble templates are used once per generation and
     correspond to the parts of the generated file with the same name. The
-    middle part is repeated N times, where N is the number of items in the
+    repeat part is repeated N times, where N is the number of items in the
     comma-separated list provided to the 'pipelines' substitution mapping.
 
     The required mappings for each section are exposed by the following
     data attributes:
 
         - preamble_placeholders
-        - middle_placeholders
+        - repeat_placeholders
         - postamble_placeholders
 
     The templating used is based on Python's :class:`string.Template`.
     """
 
     preamble_placeholders = frozenset(['compound_pipeline'])
-    middle_placeholders = frozenset(['pipelines'])
+    repeat_placeholders = frozenset(['pipelines'])
     postamble_placeholders = frozenset()
 
-    def __init__(self, preamble, middle, postamble):
+    def __init__(self, preamble, repeat, postamble):
         """Create a new generator.
 
         :param string preamble: The preamble template.
-        :param string middle: The middle template.
+        :param string repeat: The repeat template.
         :param string postamble: The postamble template.
         """
 
         self.preamble = Template(preamble)
-        self.middle = Template(middle)
+        self.repeat = Template(repeat)
         self.postamble = Template(postamble)
 
     def generate(self, **kwargs):
@@ -80,13 +80,13 @@ class CMakeCompoundPipelineGenerator:
             {k: kwargs[k]
              for k in kwargs if k in self.preamble_placeholders})
 
-        middle_subs = {
+        repeat_subs = {
             'pipeline': None,
             'depends': None,
             'output_target': None
         }
 
-        ph = next(iter(self.middle_placeholders))
+        ph = next(iter(self.repeat_placeholders))
         pipelines = kwargs[ph].split(';')
 
         for e in pipelines:
@@ -97,18 +97,18 @@ class CMakeCompoundPipelineGenerator:
         if not len(unique_pipelines) == len(pipelines):
             raise ValueError('Pipeline specified more than once')
 
-        middle_subs['pipeline'] = pipelines[0]
-        middle_subs['depends'] = 'TRGT0'
-        middle_subs['output_target'] = 'OUT_TRGT0'
-        text += self.middle.substitute(middle_subs)
+        repeat_subs['pipeline'] = pipelines[0]
+        repeat_subs['depends'] = 'TRGT0'
+        repeat_subs['output_target'] = 'OUT_TRGT0'
+        text += self.repeat.substitute(repeat_subs)
 
         pipelines = pipelines[1:]
 
         for i, pline in enumerate(pipelines):
-            middle_subs['pipeline'] = pline
-            middle_subs['depends'] = 'OUT_TRGT{}'.format(i)
-            middle_subs['output_target'] = 'OUT_TRGT{}'.format(i + 1)
-            text += self.middle.substitute(middle_subs)
+            repeat_subs['pipeline'] = pline
+            repeat_subs['depends'] = 'OUT_TRGT{}'.format(i)
+            repeat_subs['output_target'] = 'OUT_TRGT{}'.format(i + 1)
+            text += self.repeat.substitute(repeat_subs)
 
         text += self.postamble.substitute(
             {k: kwargs[k]
@@ -147,13 +147,13 @@ if __name__ == '__main__':
     fname = path.abspath(args['templatedir'] + '/' + PREAMBLE_FILENAME)
     preamble = open(fname).read()
 
-    fname = path.abspath(args['templatedir'] + '/' + MIDDLE_FILENAME)
-    middle = open(fname).read()
+    fname = path.abspath(args['templatedir'] + '/' + REPEAT_FILENAME)
+    repeat = open(fname).read()
 
     fname = path.abspath(args['templatedir'] + '/' + POSTAMBLE_FILENAME)
     postamble = open(fname).read()
 
-    g = CMakeCompoundPipelineGenerator(preamble, middle, postamble)
+    g = CMakeCompoundPipelineGenerator(preamble, repeat, postamble)
     txt = g.generate(
         compound_pipeline=args['compound_pipeline'],
         pipelines=args['pipelines'])
