@@ -60,6 +60,7 @@ class CMakeCompoundPipelineGenerator:
         :param string middle: The middle template.
         :param string postamble: The postamble template.
         """
+
         self.preamble = Template(preamble)
         self.middle = Template(middle)
         self.postamble = Template(postamble)
@@ -74,6 +75,7 @@ class CMakeCompoundPipelineGenerator:
 
         :raises: :class:`ValueError`, :class:`KeyError`
         """
+
         text = self.preamble.substitute(
             {k: kwargs[k]
              for k in kwargs if k in self.preamble_placeholders})
@@ -90,6 +92,10 @@ class CMakeCompoundPipelineGenerator:
         for e in pipelines:
             if not len(e):
                 raise ValueError('Pipeline name is empty')
+
+        unique_pipelines = {x for x in pipelines}
+        if not len(unique_pipelines) == len(pipelines):
+            raise ValueError('Pipeline specified more than once')
 
         middle_subs['pipeline'] = pipelines[0]
         middle_subs['depends'] = 'TRGT0'
