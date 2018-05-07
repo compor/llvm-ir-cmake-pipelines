@@ -1,4 +1,8 @@
 
+  if(NOT COMMAND ${pipeline})
+    message(FATAL_ERROR "command ${pipeline} is not defined")
+  endif()
+
   ${pipeline}(DEPENDS $${${depends}}
       MAIN_TARGET ${output_target})
 
