@@ -49,9 +49,9 @@ class CMakeCompoundPipelineGenerator:
     The templating used is based on Python's :class:`string.Template`.
     """
 
-    preamble_placeholders = {'compound_pipeline'}
+    preamble_placeholders = frozenset(['compound_pipeline'])
     middle_placeholder = 'pipelines'
-    postamble_placeholders = {}
+    postamble_placeholders = frozenset()
 
     def __init__(self, preamble, middle, postamble):
         """Create a new generator.
