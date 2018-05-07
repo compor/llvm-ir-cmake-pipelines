@@ -1,0 +1,7 @@
+
+if(NOT COMMAND ${pipeline})
+  message(FATAL_ERROR "command ${pipeline} is not defined")
+endif()
+
+${pipeline}(DEPENDS $${${depends}})
+

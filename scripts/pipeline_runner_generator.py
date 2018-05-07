@@ -19,51 +19,37 @@ from argparse import ArgumentParser
 from os import path
 from string import Template
 
-PREAMBLE_FILENAME = 'compound.preamble.cmake.in'
-REPEAT_FILENAME = 'compound.repeat.cmake.in'
-POSTAMBLE_FILENAME = 'compound.postamble.cmake.in'
+REPEAT_FILENAME = 'runner.repeat.cmake.in'
 
 
-class CMakeCompoundPipelineGenerator:
+class CMakePipelineRunnerGenerator:
     """A CMake lists file generator.
 
     This generator uses three :class:`string` templates to assemble and
     generate a CMake lists file. The template parts are:
 
-        - a preamble template
         - a repeat template
-        - a postamble template
 
-    The preamble and postamble templates are used once per generation and
-    correspond to the parts of the generated file with the same name. The
-    repeat part is repeated N times, where N is the number of items in the
-    comma-separated list provided to the 'pipelines' substitution mapping.
+    The repeat template is repeated N times, where N is the number of items in
+    the comma-separated list provided to the 'pipelines' substitution mapping.
 
     The required mappings for each section are exposed by the following
     data attributes:
 
-        - preamble_placeholders
         - repeat_placeholders
-        - postamble_placeholders
 
     The templating used is based on Python's :class:`string.Template`.
     """
 
-    preamble_placeholders = frozenset(['compound_pipeline'])
-    repeat_placeholders = frozenset(['pipelines'])
-    postamble_placeholders = frozenset()
+    repeat_placeholders = frozenset(['pipelines', 'depends'])
 
-    def __init__(self, preamble, repeat, postamble):
+    def __init__(self, repeat):
         """Create a new generator.
 
-        :param string preamble: The preamble template.
         :param string repeat: The repeat template.
-        :param string postamble: The postamble template.
         """
 
-        self.preamble = Template(preamble)
         self.repeat = Template(repeat)
-        self.postamble = Template(postamble)
 
     def generate(self, **kwargs):
         """Generate :class:`string` by applying substitutions to the template
@@ -76,18 +62,7 @@ class CMakeCompoundPipelineGenerator:
         :raises: :class:`ValueError`, :class:`KeyError`
         """
 
-        text = self.preamble.substitute(
-            {k: kwargs[k]
-             for k in kwargs if k in self.preamble_placeholders})
-
-        repeat_subs = {
-            'pipeline': None,
-            'depends': None,
-            'output_target': None
-        }
-
-        ph = next(iter(self.repeat_placeholders))
-        pipelines = kwargs[ph].split(';')
+        pipelines = kwargs['pipelines'].split(';')
 
         for e in pipelines:
             if not len(e):
@@ -97,22 +72,12 @@ class CMakeCompoundPipelineGenerator:
         if not len(unique_pipelines) == len(pipelines):
             raise ValueError('Pipeline specified more than once')
 
-        repeat_subs['pipeline'] = pipelines[0]
-        repeat_subs['depends'] = 'TRGT0'
-        repeat_subs['output_target'] = 'OUT_TRGT0'
-        text += self.repeat.substitute(repeat_subs)
-
-        pipelines = pipelines[1:]
-
-        for i, pline in enumerate(pipelines):
-            repeat_subs['pipeline'] = pline
-            repeat_subs['depends'] = 'OUT_TRGT{}'.format(i)
-            repeat_subs['output_target'] = 'OUT_TRGT{}'.format(i + 1)
-            text += self.repeat.substitute(repeat_subs)
-
-        text += self.postamble.substitute(
-            {k: kwargs[k]
-             for k in kwargs if k in self.postamble_placeholders})
+        text = ""
+        for pline in pipelines:
+            text += self.repeat.substitute({
+                'pipeline': pline,
+                'depends': kwargs['depends']
+            })
 
         return text
 
@@ -125,15 +90,15 @@ if __name__ == '__main__':
         required=True,
         help='Path to the template dir')
     parser.add_argument(
-        '-c',
-        dest='compound_pipeline',
-        required=True,
-        help='Name of compound pipeline')
-    parser.add_argument(
         '-p',
         dest='pipelines',
         required=True,
         help='Semicolon-separated list of pipelines')
+    parser.add_argument(
+        '-d',
+        dest='depends',
+        required=True,
+        help='Name of entry target to attach to')
     parser.add_argument(
         '-f',
         dest='file',
@@ -143,19 +108,11 @@ if __name__ == '__main__':
 
     #
 
-    fname = path.abspath(args['templatedir'] + '/' + PREAMBLE_FILENAME)
-    preamble = open(fname).read()
-
     fname = path.abspath(args['templatedir'] + '/' + REPEAT_FILENAME)
     repeat = open(fname).read()
 
-    fname = path.abspath(args['templatedir'] + '/' + POSTAMBLE_FILENAME)
-    postamble = open(fname).read()
-
-    g = CMakeCompoundPipelineGenerator(preamble, repeat, postamble)
-    txt = g.generate(
-        compound_pipeline=args['compound_pipeline'],
-        pipelines=args['pipelines'])
+    g = CMakePipelineRunnerGenerator(repeat)
+    txt = g.generate(pipelines=args['pipelines'], depends=args['depends'])
 
     outfile = sys.stdout
     if args['file']:
