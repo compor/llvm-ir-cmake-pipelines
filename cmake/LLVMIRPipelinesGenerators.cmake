@@ -9,6 +9,18 @@ function(generate_compound_pipeline_lists)
   cmake_parse_arguments(GENPLISTS
     "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
+  if(NOT GENPLISTS_COMPOUND_PIPELINE)
+    message(FATAL_ERROR "generator command is missing COMPOUND_PIPELINE option")
+  endif()
+
+  if(NOT GENPLISTS_OUTPUT_DIR)
+    message(FATAL_ERROR "generator command is missing OUTPUT_DIR option")
+  endif()
+
+  if(NOT GENPLISTS_PIPELINES)
+    message(FATAL_ERROR "generator command is missing PIPELINES option")
+  endif()
+
   set(GEN_SCRIPTS_DIR "${CMAKE_CURRENT_LIST_DIR}/../scripts/")
   set(OUTFILE "${GENPLISTS_COMPOUND_PIPELINE}.cmake")
 
@@ -34,6 +46,22 @@ function(generate_pipeline_runner_lists)
   set(multiValueArgs PIPELINES)
   cmake_parse_arguments(GENPLISTS
     "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+
+  if(NOT GENPLISTS_DEPENDS)
+    message(FATAL_ERROR "generator command is missing DEPENDS option")
+  endif()
+
+  if(NOT GENPLISTS_OUTPUT_FILE)
+    message(FATAL_ERROR "generator command is missing OUTPUT_FILE option")
+  endif()
+
+  if(NOT GENPLISTS_OUTPUT_DIR)
+    message(FATAL_ERROR "generator command is missing OUTPUT_DIR option")
+  endif()
+
+  if(NOT GENPLISTS_PIPELINES)
+    message(FATAL_ERROR "generator command is missing PIPELINES option")
+  endif()
 
   set(GEN_SCRIPTS_DIR "${CMAKE_CURRENT_LIST_DIR}/../scripts/")
   set(OUTFILE "${GENPLISTS_OUTPUT_FILE}.cmake")
