@@ -62,6 +62,11 @@ function(llvmir_pipelines_setup)
   #
 
   if(LLVMIR_COMPOUND_PIPELINES)
+    list(LENGTH LLVMIR_COMPOUND_PIPELINES LEN)
+    if(LEN GREATER 1)
+      message(FATAL_ERROR "More than 1 compound pipelines are not supported")
+    endif()
+
     set(PIPELINE_FILES_DIR "${CMAKE_CURRENT_BINARY_DIR}/pipelines/")
     file(MAKE_DIRECTORY "${PIPELINE_FILES_DIR}")
 
