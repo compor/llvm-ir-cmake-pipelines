@@ -33,9 +33,12 @@ function(generate_compound_pipeline_lists)
     -p "${GENPLISTS_PIPELINES}"
     -f ${OUTFILE}
     WORKING_DIRECTORY ${GENPLISTS_OUTPUT_DIR}
+    ERROR_VARIABLE ERR_MSG
+    OUTPUT_VARIABLE ERR_MSG
     RESULT_VARIABLE RC)
 
   if(RC)
+    message(SEND_ERROR "${ERR_MSG}")
     message(FATAL_ERROR "Failed to generate compound pipelines lists file")
   endif()
 
@@ -75,9 +78,12 @@ function(generate_pipeline_runner_lists)
     -d ${GENPLISTS_DEPENDS}
     -f ${OUTFILE}
     WORKING_DIRECTORY ${GENPLISTS_OUTPUT_DIR}
+    ERROR_VARIABLE ERR_MSG
+    OUTPUT_VARIABLE ERR_MSG
     RESULT_VARIABLE RC)
 
   if(RC)
+    message(SEND_ERROR "${ERR_MSG}")
     message(FATAL_ERROR "Failed to generate pipelines runner lists file")
   endif()
 
