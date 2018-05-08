@@ -35,8 +35,8 @@ endif()
 
 if(LLVMIR_COMPOUND_PIPELINES)
   foreach(CPLINE ${LLVMIR_COMPOUND_PIPELINES})
-    string(TOUPPER "${CPLINE}" CPLINE)
-    set(CPLINE_PARTS "LLVMIR_COMPOUND_PIPELINE_${CPLINE}")
+    string(TOUPPER "${CPLINE}" CPLINE_UC)
+    set(CPLINE_PARTS "LLVMIR_COMPOUND_PIPELINE_${CPLINE_UC}")
 
     if(NOT DEFINED ${CPLINE_PARTS})
       message(FATAL_ERROR "pipeline ${CPLINE_PARTS} is not defined!")
@@ -45,13 +45,13 @@ if(LLVMIR_COMPOUND_PIPELINES)
     set(CPLINE_PARTS_CONTENTS "${${CPLINE_PARTS}}")
 
     generate_compound_pipeline_lists(
-      COMPOUND_PIPELINE compound1
-      PIPELINES rofl1 rofl2
+      COMPOUND_PIPELINE ${CPLINE}
+      PIPELINES ${CPLINE_PARTS_CONTENTS}
       OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR})
 
     generate_pipeline_runner_lists(
-      PIPELINES compound1
-      DEPENDS hook
+      PIPELINES ${LLVMIR_COMPOUND_PIPELINES}
+      DEPENDS TARGET_HOOK_TO_REPLACE
       OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR})
   endforeach()
 endif()
