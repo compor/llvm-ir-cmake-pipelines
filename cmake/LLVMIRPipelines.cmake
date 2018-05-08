@@ -46,7 +46,7 @@ function(llvmir_pipelines_setup)
     list(APPEND CMAKE_MODULE_PATH "${_THIS_LIST_DIR}/pipelines/")
     set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" PARENT_SCOPE)
 
-    if("ALL" STREQUAL ${PIPELINE_FILES_UPPER})
+    if("ALL" STREQUAL "${PIPELINE_FILES_UPPER}")
       file(GLOB PIPELINE_FILES
         RELATIVE "${_THIS_LIST_DIR}/pipelines/"
         "${_THIS_LIST_DIR}/pipelines/*.cmake")
