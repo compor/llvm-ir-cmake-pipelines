@@ -39,8 +39,8 @@ class CMakeCompoundPipelineGenerator:
     repeat part is repeated N times, where N is the number of items in the
     comma-separated list provided to the 'pipelines' substitution mapping.
 
-    The required mappings for each section are exposed by the following
-    data attributes:
+    The required substitution mappings for each section are exposed by the
+    following data attributes:
 
         - preamble_placeholders
         - repeat_placeholders

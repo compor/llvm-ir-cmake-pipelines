@@ -1,14 +1,10 @@
 #!/usr/bin/env python
 """Command-line utility that generates CMake list files based on templates.
 
-The main intended usage is to generate CMake list files that describe compound
-targets consisting of simpler ones described in a specific linear order (aka
-pipeline) during configuration.
-
-The output is dependent on the actual contents of the templates used, but at a
-high-level, it generates a function that attaches dependent targets to a given
-target passed as an argument. The dependence order of these targets is the one
-used to specify the individual simpler target functions.
+The main intended usage is to generate CMake list files that apply the
+specified functions (aka pipelines) in that order over a given project target
+during configuration. The provided target in considered as an entry point or a
+hook over which the generated functions will be run on.
 
 For more information check the command line option for help: ``[-h, -help]``).
 """
@@ -25,16 +21,16 @@ REPEAT_FILENAME = 'runner.repeat.cmake.in'
 class CMakePipelineRunnerGenerator:
     """A CMake lists file generator.
 
-    This generator uses three :class:`string` templates to assemble and
-    generate a CMake lists file. The template parts are:
+    This generator uses one :class:`string` template to assemble and generate a
+    CMake lists file. The template part is:
 
         - a repeat template
 
     The repeat template is repeated N times, where N is the number of items in
     the comma-separated list provided to the 'pipelines' substitution mapping.
 
-    The required mappings for each section are exposed by the following
-    data attributes:
+    The required substitution mappings for each section are exposed by the
+    following data attributes:
 
         - repeat_placeholders
 
