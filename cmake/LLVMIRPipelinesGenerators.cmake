@@ -27,7 +27,7 @@ endfunction()
 
 function(generate_pipeline_runner_lists)
   set(options)
-  set(oneValueArgs DEPENDS OUTPUT_DIR)
+  set(oneValueArgs DEPENDS OUTPUT_FILE OUTPUT_DIR)
   set(multiValueArgs PIPELINES)
   cmake_parse_arguments(GENPLISTS
     "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
@@ -39,7 +39,7 @@ function(generate_pipeline_runner_lists)
     -t ${GEN_SCRIPTS_DIR}/templates/
     -p "${GENPLISTS_PIPELINES}"
     -d ${GENPLISTS_DEPENDS}
-    -f runner.cmake
+    -f ${GENPLISTS_OUTPUT_FILE}.cmake
     WORKING_DIRECTORY ${GENPLISTS_OUTPUT_DIR}
     RESULT_VARIABLE RC)
 

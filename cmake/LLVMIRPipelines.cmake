@@ -52,6 +52,7 @@ if(LLVMIR_COMPOUND_PIPELINES)
     generate_pipeline_runner_lists(
       PIPELINES ${LLVMIR_COMPOUND_PIPELINES}
       DEPENDS TARGET_HOOK_TO_REPLACE
+      OUTPUT_FILE runner
       OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR})
   endforeach()
 endif()
