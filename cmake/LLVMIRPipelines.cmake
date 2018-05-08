@@ -8,6 +8,8 @@ cmake_minimum_required(VERSION 3.2)
 
 message(STATUS "LLVM IR Pipelines")
 
+include(${CMAKE_CURRENT_LIST_DIR}/LLVMIRPipelinesGenerators.cmake)
+
 if(LLVMIR_PIPELINES_TO_INCLUDE)
   set(PIPELINE_FILES "${LLVMIR_PIPELINES_TO_INCLUDE}")
   string(TOUPPER "${PIPELINE_FILES}" PIPELINE_FILES_UPPER)
@@ -29,9 +31,7 @@ else()
   message(WARNING "No pipelines included")
 endif()
 
-
 #
-
 
 if(LLVMIR_COMPOUND_PIPELINES)
   foreach(CPLINE ${LLVMIR_COMPOUND_PIPELINES})
@@ -44,8 +44,14 @@ if(LLVMIR_COMPOUND_PIPELINES)
 
     set(CPLINE_PARTS_CONTENTS "${${CPLINE_PARTS}}")
 
-    message(STATUS "+++++${CPLINE_PARTS}=${CPLINE_PARTS_CONTENTS}")
+    generate_compound_pipeline_lists(
+      COMPOUND_PIPELINE compound1
+      PIPELINES rofl1 rofl2
+      OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR})
 
-    # generate stuff here
+    generate_pipeline_runner_lists(
+      PIPELINES compound1
+      DEPENDS hook
+      OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR})
   endforeach()
 endif()
