@@ -10,19 +10,22 @@ function(generate_compound_pipeline_lists)
     "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
   set(GEN_SCRIPTS_DIR "${CMAKE_CURRENT_LIST_DIR}/../scripts/")
+  set(OUTFILE "${GENPLISTS_COMPOUND_PIPELINE}.cmake")
 
   execute_process(
     COMMAND ${GEN_SCRIPTS_DIR}/compound_pipeline_generator.py
     -t ${GEN_SCRIPTS_DIR}/templates/
     -c ${GENPLISTS_COMPOUND_PIPELINE}
     -p "${GENPLISTS_PIPELINES}"
-    -f ${GENPLISTS_COMPOUND_PIPELINE}.cmake
+    -f ${OUTFILE}
     WORKING_DIRECTORY ${GENPLISTS_OUTPUT_DIR}
     RESULT_VARIABLE RC)
 
   if(RC)
     message(FATAL_ERROR "Failed to generate compound pipelines lists file")
   endif()
+
+  message(STATUS "Generated compound pipelines lists file: ${OUTFILE}")
 endfunction()
 
 function(generate_pipeline_runner_lists)
@@ -33,18 +36,21 @@ function(generate_pipeline_runner_lists)
     "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
   set(GEN_SCRIPTS_DIR "${CMAKE_CURRENT_LIST_DIR}/../scripts/")
+  set(OUTFILE "${GENPLISTS_OUTPUT_FILE}.cmake")
 
   execute_process(
     COMMAND ${GEN_SCRIPTS_DIR}/pipeline_runner_generator.py
     -t ${GEN_SCRIPTS_DIR}/templates/
     -p "${GENPLISTS_PIPELINES}"
     -d ${GENPLISTS_DEPENDS}
-    -f ${GENPLISTS_OUTPUT_FILE}.cmake
+    -f ${OUTFILE}
     WORKING_DIRECTORY ${GENPLISTS_OUTPUT_DIR}
     RESULT_VARIABLE RC)
 
   if(RC)
     message(FATAL_ERROR "Failed to generate pipelines runner lists file")
   endif()
+
+  message(STATUS "Generated pipelines runner lists file: ${OUTFILE}")
 endfunction()
 
