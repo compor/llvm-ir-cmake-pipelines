@@ -2,8 +2,8 @@
 
 include(CMakeParseArguments)
 
-function(loopc14n)
-  set(PIPELINE_NAME "loopc14n")
+function(loopc14nslim)
+  set(PIPELINE_NAME "loopc14nslim")
   string(TOUPPER "${PIPELINE_NAME}" PIPELINE_NAME_UPPER)
 
   set(options ALL)
@@ -55,19 +55,14 @@ function(loopc14n)
 
   # pipeline targets and chaining
 
-  llvmir_attach_bc_target(
-    TARGET ${PIPELINE_PREFIX}_bc
-    DEPENDS ${TRGT})
-  add_dependencies(${PIPELINE_PREFIX}_bc ${TRGT})
-
   llvmir_attach_opt_pass_target(
     TARGET ${PIPELINE_PREFIX}_opt
-    DEPENDS ${PIPELINE_PREFIX}_bc
+    DEPENDS ${TRGT}
     -mem2reg
     -mergereturn
     -simplifycfg
     -loop-simplify)
-  add_dependencies(${PIPELINE_PREFIX}_opt ${PIPELINE_PREFIX}_bc)
+  add_dependencies(${PIPELINE_PREFIX}_opt ${TRGT})
 
   llvmir_attach_link_target(
     TARGET ${PIPELINE_PREFIX}_link
@@ -82,7 +77,6 @@ function(loopc14n)
   # aggregate targets for pipeline
 
   add_custom_target(${PIPELINE_SUBTARGET} DEPENDS
-    ${PIPELINE_PREFIX}_bc
     ${PIPELINE_PREFIX}_opt
     ${PIPELINE_PREFIX}_link
     ${PIPELINE_PREFIX}_bc_exe)
@@ -90,7 +84,6 @@ function(loopc14n)
   set(INTERNAL_TRGT_LIST "")
   list(APPEND INTERNAL_TRGT_LIST
     ${PIPELINE_SUBTARGET}
-    ${PIPELINE_PREFIX}_bc
     ${PIPELINE_PREFIX}_opt
     ${PIPELINE_PREFIX}_link
     ${PIPELINE_PREFIX}_bc_exe)
