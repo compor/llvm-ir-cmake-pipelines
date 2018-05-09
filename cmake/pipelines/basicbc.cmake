@@ -2,7 +2,7 @@
 
 set(_THIS_LIST_DIR "${CMAKE_CURRENT_LIST_DIR}")
 
-include(${_THIS_LIST_DIR}/common.cmake)
+include(${_THIS_LIST_DIR}/internal/common.cmake)
 
 function(basicbc)
   pipeline_setup(NAME "basicbc" ${ARGV})
