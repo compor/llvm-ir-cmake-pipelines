@@ -11,6 +11,12 @@ function(pipeline_setup)
 
   # argument checks
 
+  if(PLINE_ALL)
+    set(PLINE_ALL "ALL")
+  else()
+    set(PLINE_ALL "")
+  endif()
+
   if(NOT PLINE_MAIN_TARGET)
     message(FATAL_ERROR "pipeline ${PLINE_NAME}: missing MAIN_TARGET target")
   endif()
@@ -32,7 +38,7 @@ function(pipeline_setup)
   # set up targets
 
   if(NOT TARGET "${PLINE_NAME}")
-    add_custom_target("${PLINE_NAME}" "${PLINE_ALL}")
+    add_custom_target("${PLINE_NAME}" ${PLINE_ALL})
   endif()
 
   set(PLINE_SUBTARGET "${PLINE_NAME}_${PLINE_DEPENDS}")
