@@ -7,12 +7,17 @@ include(${_THIS_LIST_DIR}/internal/common.cmake)
 function(pollyplain)
   pipeline_setup(NAME "pollyplain" ${ARGV})
 
+  if(NOT ENV{POLLYPLAIN_PASS_MODULE})
+    message(FATAL_ERROR "pipeline ${PLINE_NAME} requires env variable: \
+    POLLYPLAIN_PASS_MODULE")
+  endif()
+
   # pipeline targets and chaining
 
   llvmir_attach_opt_pass_target(
     TARGET ${PLINE_PREFIX}_link
     DEPENDS ${PLINE_DEPENDS}
-    -load ${LLVMPOLLY_SHARED_LIBRARY}
+    -load $ENV{POLLYPLAIN_PASS_MODULE}
     -polly-canonicalize
     -polly-scops
     -polly-export-jscop
