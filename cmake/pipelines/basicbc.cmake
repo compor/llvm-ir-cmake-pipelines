@@ -31,7 +31,6 @@ function(basicbc)
     ${PLINE_PREFIX}_link
     ${PLINE_PREFIX}_bc_exe)
 
-  set(INTERNAL_TARGET_LIST "")
   list(APPEND INTERNAL_TARGET_LIST
     ${PLINE_PREFIX}_bc
     ${PLINE_PREFIX}_link
