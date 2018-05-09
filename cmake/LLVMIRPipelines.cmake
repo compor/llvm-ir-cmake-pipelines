@@ -34,9 +34,9 @@ function(llvmir_pipelines_setup)
     LLVMIR_PIPELINES_TO_INCLUDE")
   endif()
 
-  if(NOT LLVMIR_COMPOUND_PIPELINES)
+  if(NOT LLVMIR_PIPELINES_COMPOUND)
     message(WARNING "No compound pipelines specified using variable:\
-    LLVMIR_COMPOUND_PIPELINES")
+    LLVMIR_PIPELINES_COMPOUND")
   endif()
 
   if(LLVMIR_PIPELINES_TO_INCLUDE)
@@ -61,8 +61,8 @@ function(llvmir_pipelines_setup)
 
   #
 
-  if(LLVMIR_COMPOUND_PIPELINES)
-    list(LENGTH LLVMIR_COMPOUND_PIPELINES LEN)
+  if(LLVMIR_PIPELINES_COMPOUND)
+      list(LENGTH LLVMIR_PIPELINES_COMPOUND LEN)
     if(LEN GREATER 1)
       message(FATAL_ERROR "More than 1 compound pipelines are not supported")
     endif()
@@ -73,9 +73,9 @@ function(llvmir_pipelines_setup)
     list(APPEND CMAKE_MODULE_PATH "${PIPELINE_FILES_DIR}")
     set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" PARENT_SCOPE)
 
-    foreach(CPLINE ${LLVMIR_COMPOUND_PIPELINES})
+    foreach(CPLINE ${LLVMIR_PIPELINES_COMPOUND})
       string(TOUPPER "${CPLINE}" CPLINE_UC)
-      set(CPLINE_PARTS "LLVMIR_COMPOUND_PIPELINE_${CPLINE_UC}")
+      set(CPLINE_PARTS "LLVMIR_PIPELINES_COMPOUND_${CPLINE_UC}")
 
       if(NOT DEFINED ${CPLINE_PARTS})
         message(FATAL_ERROR "pipeline ${CPLINE_PARTS} is not defined!")
@@ -92,7 +92,7 @@ function(llvmir_pipelines_setup)
     endforeach()
 
     generate_pipeline_runner_lists(
-      PIPELINES ${LLVMIR_COMPOUND_PIPELINES}
+      PIPELINES ${LLVMIR_PIPELINES_COMPOUND}
       DEPENDS ${LPS_DEPENDS}
       OUTPUT_FILE ${LPS_OUTPUT_FILE}
       OUTPUT_DIR ${PIPELINE_FILES_DIR})
