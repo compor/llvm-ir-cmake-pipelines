@@ -6,7 +6,7 @@
 
 cmake_minimum_required(VERSION 3.2)
 
-message(STATUS "LLVM IR Pipelines")
+set(_MOD_NAME "LLVM IR Pipelines")
 
 include(CMakeParseArguments)
 
@@ -21,22 +21,25 @@ function(llvmir_pipelines_setup)
   cmake_parse_arguments(LPS
     "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
+  message(STATUS "Setting up ${_MOD_NAME}")
+
   if(NOT LPS_DEPENDS)
-    message(FATAL_ERROR "setup command is missing DEPENDS option")
+    message(FATAL_ERROR "${_MOD_NAME}: Setup command is missing DEPENDS option")
   endif()
 
   if(NOT LPS_OUTPUT_FILE)
-    message(FATAL_ERROR "setup command is missing OUTPUT_FILE option")
+    message(FATAL_ERROR "${_MOD_NAME}: Setup command is missing OUTPUT_FILE \
+    option")
   endif()
 
   if(NOT LLVMIR_PIPELINES_TO_INCLUDE)
-    message(WARNING "No pipelines to be included using variable: \
+    message(WARNING "${_MOD_NAME}: No pipelines to be included using variable: \
     LLVMIR_PIPELINES_TO_INCLUDE")
   endif()
 
   if(NOT LLVMIR_PIPELINES_COMPOUND)
-    message(WARNING "No compound pipelines specified using variable:\
-    LLVMIR_PIPELINES_COMPOUND")
+    message(WARNING "${_MOD_NAME}: No compound pipelines specified using \
+    variable: LLVMIR_PIPELINES_COMPOUND")
   endif()
 
   if(LLVMIR_PIPELINES_TO_INCLUDE)
@@ -45,7 +48,6 @@ function(llvmir_pipelines_setup)
 
     list(APPEND CMAKE_MODULE_PATH "${_THIS_LIST_DIR}/pipelines/")
     set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" PARENT_SCOPE)
-    message(STATUS "${CMAKE_MODULE_PATH}")
 
     if("ALL" STREQUAL "${PIPELINE_FILES_UPPER}")
       file(GLOB PIPELINE_FILES
@@ -54,7 +56,7 @@ function(llvmir_pipelines_setup)
     endif()
 
     foreach(FILE ${PIPELINE_FILES})
-      message(STATUS "Including pipeline: ${FILE}")
+      message(STATUS "${_MOD_NAME}: Including pipeline: ${FILE}")
 
       include("${FILE}")
     endforeach()
@@ -63,9 +65,10 @@ function(llvmir_pipelines_setup)
   #
 
   if(LLVMIR_PIPELINES_COMPOUND)
-      list(LENGTH LLVMIR_PIPELINES_COMPOUND LEN)
+    list(LENGTH LLVMIR_PIPELINES_COMPOUND LEN)
     if(LEN GREATER 1)
-      message(FATAL_ERROR "More than 1 compound pipelines are not supported")
+      message(FATAL_ERROR "${_MOD_NAME}: More than 1 compound pipelines are \
+      not supported")
     endif()
 
     set(PIPELINE_FILES_DIR "${CMAKE_CURRENT_BINARY_DIR}/pipelines/")
@@ -79,7 +82,8 @@ function(llvmir_pipelines_setup)
       set(CPLINE_PARTS "LLVMIR_PIPELINES_COMPOUND_${CPLINE_UC}")
 
       if(NOT DEFINED ${CPLINE_PARTS})
-        message(FATAL_ERROR "pipeline ${CPLINE_PARTS} is not defined!")
+        message(FATAL_ERROR "${_MOD_NAME}: Pipeline ${CPLINE_PARTS} is not \
+        defined!")
       endif()
 
       set(CPLINE_PARTS_CONTENTS "${${CPLINE_PARTS}}")

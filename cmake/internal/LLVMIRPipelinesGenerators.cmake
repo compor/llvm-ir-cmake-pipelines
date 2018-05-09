@@ -13,15 +13,18 @@ function(generate_compound_pipeline_lists)
     "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
   if(NOT GENPLISTS_COMPOUND_PIPELINE)
-    message(FATAL_ERROR "generator command is missing COMPOUND_PIPELINE option")
+    message(FATAL_ERROR "${_MOD_NAME} generator command is missing \
+    COMPOUND_PIPELINE option")
   endif()
 
   if(NOT GENPLISTS_OUTPUT_DIR)
-    message(FATAL_ERROR "generator command is missing OUTPUT_DIR option")
+    message(FATAL_ERROR "${_MOD_NAME}: generator command is missing \
+    OUTPUT_DIR option")
   endif()
 
   if(NOT GENPLISTS_PIPELINES)
-    message(FATAL_ERROR "generator command is missing PIPELINES option")
+    message(FATAL_ERROR "${_MOD_NAME}: generator command is missing \
+    PIPELINES option")
   endif()
 
   set(OUTFILE "${GENPLISTS_COMPOUND_PIPELINE}.cmake")
@@ -38,12 +41,14 @@ function(generate_compound_pipeline_lists)
     RESULT_VARIABLE RC)
 
   if(RC)
-    message(SEND_ERROR "${RC}")
+    message(SEND_ERROR "${_MOD_NAME}: ${RC}")
     message(SEND_ERROR "${ERR_MSG}")
-    message(FATAL_ERROR "Failed to generate compound pipelines lists file")
+    message(FATAL_ERROR "${_MOD_NAME}: Failed to generate compound pipelines \
+    lists file")
   endif()
 
-  message(STATUS "Generated compound pipelines lists file: ${OUTFILE}")
+  message(STATUS "${_MOD_NAME}: Generated compound pipelines lists file: \
+  ${OUTFILE}")
 endfunction()
 
 function(generate_pipeline_runner_lists)
@@ -54,19 +59,23 @@ function(generate_pipeline_runner_lists)
     "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
   if(NOT GENPLISTS_DEPENDS)
-    message(FATAL_ERROR "generator command is missing DEPENDS option")
+    message(FATAL_ERROR "${_MOD_NAME}: generator command is missing \
+    DEPENDS option")
   endif()
 
   if(NOT GENPLISTS_OUTPUT_FILE)
-    message(FATAL_ERROR "generator command is missing OUTPUT_FILE option")
+    message(FATAL_ERROR "${_MOD_NAME}: generator command is missing \
+    OUTPUT_FILE option")
   endif()
 
   if(NOT GENPLISTS_OUTPUT_DIR)
-    message(FATAL_ERROR "generator command is missing OUTPUT_DIR option")
+    message(FATAL_ERROR "${_MOD_NAME}: generator command is missing \
+    OUTPUT_DIR option")
   endif()
 
   if(NOT GENPLISTS_PIPELINES)
-    message(FATAL_ERROR "generator command is missing PIPELINES option")
+    message(FATAL_ERROR "${_MOD_NAME}: generator command is missing \
+    PIPELINES option")
   endif()
 
   set(OUTFILE "${GENPLISTS_OUTPUT_FILE}.cmake")
@@ -83,11 +92,13 @@ function(generate_pipeline_runner_lists)
     RESULT_VARIABLE RC)
 
   if(RC)
-    message(SEND_ERROR "${RC}")
+    message(SEND_ERROR "${_MOD_NAME}: ${RC}")
     message(SEND_ERROR "${ERR_MSG}")
-    message(FATAL_ERROR "Failed to generate pipelines runner lists file")
+    message(FATAL_ERROR "${_MOD_NAME}: Failed to generate pipelines runner \
+    lists file")
   endif()
 
-  message(STATUS "Generated pipelines runner lists file: ${OUTFILE}")
+  message(STATUS "${_MOD_NAME}: Generated pipelines runner lists file: \
+  ${OUTFILE}")
 endfunction()
 
