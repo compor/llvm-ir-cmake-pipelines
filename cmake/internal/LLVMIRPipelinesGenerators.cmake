@@ -3,6 +3,7 @@
 include(CMakeParseArguments)
 
 set(_THIS_LIST_DIR "${CMAKE_CURRENT_LIST_DIR}")
+set(_GEN_SCRIPTS_DIR "${_THIS_LIST_DIR}/../../scripts/")
 
 function(generate_compound_pipeline_lists)
   set(options)
@@ -23,12 +24,11 @@ function(generate_compound_pipeline_lists)
     message(FATAL_ERROR "generator command is missing PIPELINES option")
   endif()
 
-  set(GEN_SCRIPTS_DIR "${_THIS_LIST_DIR}/../../scripts/")
   set(OUTFILE "${GENPLISTS_COMPOUND_PIPELINE}.cmake")
 
   execute_process(
-    COMMAND ${GEN_SCRIPTS_DIR}/compound_pipeline_generator.py
-    -t ${GEN_SCRIPTS_DIR}/templates/
+    COMMAND ${_GEN_SCRIPTS_DIR}/compound_pipeline_generator.py
+    -t ${_GEN_SCRIPTS_DIR}/templates/
     -c ${GENPLISTS_COMPOUND_PIPELINE}
     -p "${GENPLISTS_PIPELINES}"
     -f ${OUTFILE}
@@ -69,12 +69,11 @@ function(generate_pipeline_runner_lists)
     message(FATAL_ERROR "generator command is missing PIPELINES option")
   endif()
 
-  set(GEN_SCRIPTS_DIR "${_THIS_LIST_DIR}/../../scripts/")
   set(OUTFILE "${GENPLISTS_OUTPUT_FILE}.cmake")
 
   execute_process(
-    COMMAND ${GEN_SCRIPTS_DIR}/pipeline_runner_generator.py
-    -t ${GEN_SCRIPTS_DIR}/templates/
+    COMMAND ${_GEN_SCRIPTS_DIR}/pipeline_runner_generator.py
+    -t ${_GEN_SCRIPTS_DIR}/templates/
     -p "${GENPLISTS_PIPELINES}"
     -d ${GENPLISTS_DEPENDS}
     -f ${OUTFILE}

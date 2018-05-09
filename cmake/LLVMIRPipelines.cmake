@@ -10,9 +10,9 @@ message(STATUS "LLVM IR Pipelines")
 
 include(CMakeParseArguments)
 
-set(_THIS_LIST_DIR "${CMAKE_CURRENT_LIST_DIR}")
+include(${CMAKE_CURRENT_LIST_DIR}/internal/LLVMIRPipelinesGenerators.cmake)
 
-include(${_THIS_LIST_DIR}/LLVMIRPipelinesGenerators.cmake)
+set(_THIS_LIST_DIR "${CMAKE_CURRENT_LIST_DIR}")
 
 function(llvmir_pipelines_setup)
   set(options)
@@ -45,6 +45,7 @@ function(llvmir_pipelines_setup)
 
     list(APPEND CMAKE_MODULE_PATH "${_THIS_LIST_DIR}/pipelines/")
     set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" PARENT_SCOPE)
+    message(STATUS "${CMAKE_MODULE_PATH}")
 
     if("ALL" STREQUAL "${PIPELINE_FILES_UPPER}")
       file(GLOB PIPELINE_FILES
