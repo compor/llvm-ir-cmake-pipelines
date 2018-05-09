@@ -5,6 +5,10 @@ set(_THIS_LIST_DIR "${CMAKE_CURRENT_LIST_DIR}")
 include(${_THIS_LIST_DIR}/internal/common.cmake)
 
 function(loopc14n-full)
+  # CAUTION
+  # function name and NAME provided below are required to match in order for
+  # things to work, since there is currently no programmatic way of accessing
+  # a function's name
   pipeline_setup(NAME "loopc14n-full" ${ARGV})
 
   # pipeline targets and chaining
