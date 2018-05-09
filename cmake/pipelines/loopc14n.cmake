@@ -1,5 +1,10 @@
 # cmake file
 
+# pipeline that attaches to bitcode level targets and performs:
+# - conversion to SSA form
+# - loop, CFG and function return simplification
+# using standard LLVM opt passes
+
 set(_THIS_LIST_DIR "${CMAKE_CURRENT_LIST_DIR}")
 
 include(${_THIS_LIST_DIR}/internal/common.cmake)

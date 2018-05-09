@@ -1,5 +1,7 @@
 # cmake file
 
+# pipeline that attaches to source level targets and produces LLVM IR
+
 set(_THIS_LIST_DIR "${CMAKE_CURRENT_LIST_DIR}")
 
 include(${_THIS_LIST_DIR}/internal/common.cmake)

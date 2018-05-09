@@ -1,5 +1,8 @@
 # cmake file
 
+# pipeline that attaches to bitcode level targets and performs a series of LLVM
+# polly passes
+
 set(_THIS_LIST_DIR "${CMAKE_CURRENT_LIST_DIR}")
 
 include(${_THIS_LIST_DIR}/internal/common.cmake)
