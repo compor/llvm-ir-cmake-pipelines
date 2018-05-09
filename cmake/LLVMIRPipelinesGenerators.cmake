@@ -23,7 +23,7 @@ function(generate_compound_pipeline_lists)
     message(FATAL_ERROR "generator command is missing PIPELINES option")
   endif()
 
-  set(GEN_SCRIPTS_DIR "${_THIS_LIST_DIR}/../scripts/")
+  set(GEN_SCRIPTS_DIR "${_THIS_LIST_DIR}/../../scripts/")
   set(OUTFILE "${GENPLISTS_COMPOUND_PIPELINE}.cmake")
 
   execute_process(
@@ -68,7 +68,7 @@ function(generate_pipeline_runner_lists)
     message(FATAL_ERROR "generator command is missing PIPELINES option")
   endif()
 
-  set(GEN_SCRIPTS_DIR "${_THIS_LIST_DIR}/../scripts/")
+  set(GEN_SCRIPTS_DIR "${_THIS_LIST_DIR}/../../scripts/")
   set(OUTFILE "${GENPLISTS_OUTPUT_FILE}.cmake")
 
   execute_process(
