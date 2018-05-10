@@ -30,20 +30,20 @@ The operation of the project is influenced and controlled by these `cmake` varia
 
 -   `LLVMIR_PIPELINES_TO_INCLUDE`  
     This is a semicolon-separated list of pipelines to be included in the current project. The directory searched for is
-    under directory `cmake/pipelines`. Each filename should correspond to one `cmake` command with the same name:  
+    under directory `cmake/pipelines`. Each filename should correspond to one `cmake` command with the same name.  
 
-      A pipeline file named `foobar.cmake` should define the `foobar` command with the following signature:
+    A pipeline file named `foobar.cmake` should define the `foobar` command with the following signature:
 
     ```cmake
-    function(foobar DEPENDS MyTarget MAIN_TARGET FoobarOutTarget TARGET_LIST FoobarOutTargetList)
+    function(foobar DEPENDS MyTarget MAIN_TARGET FoobarOutTarget [TARGET_LIST FoobarOutTargetList] [ALL])
     ```
 
-    The `DEPENDS` parameter must be an existing target in the user's project for which `LLVM` bitcode generation is
-    required. The `MAIN_TARGET` parameter defines the variable that will be set to the name of the target (out of those 
-    defined in the pipeline `foobar`) that is going to be used for chaining pipelines. The `TARGET_LIST` parameter
-    defines the variable that will be set to the names of the targets defined in the pipeline.
+    The `DEPENDS` option must be an existing target in the user's project for which `LLVM` bitcode generation is
+    required. The `MAIN_TARGET` option defines the variable that will be set to the name of the target (out of those
+    defined in the pipeline `foobar`) that is going to be used for chaining pipelines. The `TARGET_LIST` option defines
+    the variable that will be set to the names of the targets defined in the pipeline.
 
-    **CAUTION**: Command name in `cmake` are [case-insensitive][4], but filesystems do not typically treat file name in
+    **CAUTION**: Command names in `cmake` are [case-insensitive][4], but filesystems do not typically treat file name in
     this manner. Thus, in an attempt to preserve our sanity, we have adopted the convention of using _all lowercase_ for
     the filenames containing pipelines of the same name.
 
@@ -61,7 +61,7 @@ The operation of the project is influenced and controlled by these `cmake` varia
     cmake \
     -DLLVMIR_PIPELINES_TO_INCLUDE="basicbc;loopc14n" \
     -DLLVMIR_PIPELINES_COMPOUND="mygroup" \
-    -DLLVMIR_PIPELINES_COMPOUND_MYGROUP="loopc14n" \
+    -DLLVMIR_PIPELINES_COMPOUND_MYGROUP="basicbc;loopc14n" \
     [path to source dir]
     ```
 
