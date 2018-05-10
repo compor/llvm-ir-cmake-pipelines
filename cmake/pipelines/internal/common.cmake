@@ -39,6 +39,12 @@ function(pipeline_setup)
 
   if(NOT TARGET "${PLINE_NAME}")
     add_custom_target("${PLINE_NAME}" ${PLINE_ALL})
+  else()
+    get_target_property(HasExcludeAll "${PLINE_NAME}" EXCLUDE_FROM_ALL)
+    if(PLINE_ALL EQUAL HasExcludeAll)
+      message(WARNING "target ${PLINE_NAME} defined with conflicting \
+      EXCLUDE_FROM_ALL properties")
+    endif()
   endif()
 
   set(PLINE_SUBTARGET "${PLINE_NAME}_${PLINE_DEPENDS}")
