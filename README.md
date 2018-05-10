@@ -78,6 +78,10 @@ The operation of the project is influenced and controlled by these `cmake` varia
 
 For complete example configurations and uses see this [repo][3].
 
+## Documentation
+
+For further documentation, have a look in the `doc` directory.
+
 [1]: https://cmake.org
 
 [2]: https://github.com/compor/llvm-ir-cmake-utils
