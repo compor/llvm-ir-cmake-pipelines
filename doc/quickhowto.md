@@ -43,7 +43,7 @@ The required signature for a pipeline/chain function is:
     used in further chaining with other pipelines. This target should not be an empty target.
 -   `TARGET_LIST`  
     This option specifies the variable name which will contain the list of targets defined by the pipeline. The targets 
-    in this list should not be empty targets.
+    in this list may be empty targets.
 -   `ALL`  
     This option specifies if the pipeline empty target (see `PLINE_NAME` below) is going to be added to the default
     build target. This behaves exactly the same as the `ALL` option of the `add_custom_target` command.

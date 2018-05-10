@@ -44,26 +44,20 @@ function(loopc14n-full)
 
   # aggregate targets for pipeline
 
-  add_custom_target(${PLINE_SUBTARGET} DEPENDS
-    ${PLINE_PREFIX}_bc
-    ${PLINE_PREFIX}_opt
-    ${PLINE_PREFIX}_link
-    ${PLINE_PREFIX}_bc_exe)
-
   list(APPEND INTERNAL_TARGET_LIST
-    ${PLINE_SUBTARGET}
     ${PLINE_PREFIX}_bc
     ${PLINE_PREFIX}_opt
     ${PLINE_PREFIX}_link
     ${PLINE_PREFIX}_bc_exe)
 
-  add_dependencies(${PLINE_NAME} ${PLINE_SUBTARGET})
+  add_dependencies(${PLINE_SUBTARGET} ${INTERNAL_TARGET_LIST})
 
   # export targets
 
   set(${PLINE_MAIN_TARGET} "${PLINE_PREFIX}_link" PARENT_SCOPE)
 
   if(TARGET_LIST)
+    list(APPEND INTERNAL_TARGET_LIST ${PLINE_SUBTARGET})
     set(${TARGET_LIST} "${INTERNAL_TARGET_LIST}" PARENT_SCOPE)
   endif()
 endfunction()
