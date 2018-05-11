@@ -20,22 +20,16 @@ function(basicbc)
     DEPENDS ${PLINE_DEPENDS})
   add_dependencies(${PLINE_PREFIX}_bc ${PLINE_DEPENDS})
 
-  llvmir_attach_link_target(
-    TARGET ${PLINE_PREFIX}_link
-    DEPENDS ${PLINE_PREFIX}_bc)
-  add_dependencies(${PLINE_PREFIX}_link ${PLINE_PREFIX}_bc)
-
   # aggregate targets for pipeline
 
   list(APPEND INTERNAL_TARGET_LIST
-    ${PLINE_PREFIX}_bc
-    ${PLINE_PREFIX}_link)
+    ${PLINE_PREFIX}_bc)
 
   add_dependencies(${PLINE_SUBTARGET} ${INTERNAL_TARGET_LIST})
 
   # export targets
 
-  set(${PLINE_MAIN_TARGET} "${PLINE_PREFIX}_link" PARENT_SCOPE)
+  set(${PLINE_MAIN_TARGET} "${PLINE_PREFIX}_bc" PARENT_SCOPE)
 
   if(PLINE_TARGET_LIST)
     list(APPEND INTERNAL_TARGET_LIST ${PLINE_SUBTARGET})
