@@ -27,22 +27,35 @@ function(loopc14n)
     -loop-simplify)
   add_dependencies(${PLINE_PREFIX}_opt ${PLINE_DEPENDS})
 
-  llvmir_attach_link_target(
-    TARGET ${PLINE_PREFIX}_link
-    DEPENDS ${PLINE_PREFIX}_opt)
-  add_dependencies(${PLINE_PREFIX}_link ${PLINE_PREFIX}_opt)
+  get_target_property(SOURCE_FILES ${PLINE_PREFIX}_opt LLVMIR_FILES)
+  list(LENGTH SOURCE_FILES FILES_NUMBER)
+
+  if(FILES_NUMBER GREATER 1)
+    llvmir_attach_link_target(
+      TARGET ${PLINE_PREFIX}_link
+      DEPENDS ${PLINE_PREFIX}_opt)
+    add_dependencies(${PLINE_PREFIX}_link ${PLINE_PREFIX}_opt)
+  endif()
 
   # aggregate targets for pipeline
 
   list(APPEND INTERNAL_TARGET_LIST
-    ${PLINE_PREFIX}_opt
-    ${PLINE_PREFIX}_link)
+    ${PLINE_PREFIX}_opt)
+
+  if(FILES_NUMBER GREATER 1)
+    list(APPEND INTERNAL_TARGET_LIST
+      ${PLINE_PREFIX}_link)
+  endif()
 
   add_dependencies(${PLINE_SUBTARGET} ${INTERNAL_TARGET_LIST})
 
   # export targets
 
-  set(${PLINE_MAIN_TARGET} "${PLINE_PREFIX}_link" PARENT_SCOPE)
+  if(FILES_NUMBER GREATER 1)
+    set(${PLINE_MAIN_TARGET} "${PLINE_PREFIX}_link" PARENT_SCOPE)
+  else()
+    set(${PLINE_MAIN_TARGET} "${PLINE_PREFIX}_opt" PARENT_SCOPE)
+  endif()
 
   if(TRGT_LIST)
     list(APPEND INTERNAL_TARGET_LIST ${PLINE_SUBTARGET})
