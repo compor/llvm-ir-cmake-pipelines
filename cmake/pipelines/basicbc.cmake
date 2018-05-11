@@ -25,17 +25,11 @@ function(basicbc)
     DEPENDS ${PLINE_PREFIX}_bc)
   add_dependencies(${PLINE_PREFIX}_link ${PLINE_PREFIX}_bc)
 
-  llvmir_attach_executable(
-    TARGET ${PLINE_PREFIX}_bc_exe
-    DEPENDS ${PLINE_PREFIX}_link)
-  add_dependencies(${PLINE_PREFIX}_bc_exe ${PLINE_PREFIX}_link)
-
   # aggregate targets for pipeline
 
   list(APPEND INTERNAL_TARGET_LIST
     ${PLINE_PREFIX}_bc
-    ${PLINE_PREFIX}_link
-    ${PLINE_PREFIX}_bc_exe)
+    ${PLINE_PREFIX}_link)
 
   add_dependencies(${PLINE_SUBTARGET} ${INTERNAL_TARGET_LIST})
 
