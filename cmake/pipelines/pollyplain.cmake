@@ -22,7 +22,7 @@ function(pollyplain)
   # pipeline targets and chaining
 
   llvmir_attach_opt_pass_target(
-    TARGET ${PLINE_PREFIX}_link
+    TARGET ${PLINE_PREFIX}_opt
     DEPENDS ${PLINE_DEPENDS}
     -load $ENV{POLLYPLAIN_PASS_MODULE}
     -polly-canonicalize
@@ -30,24 +30,24 @@ function(pollyplain)
     -polly-export-jscop
     -polly-codegen
     -polly-parallel)
-  add_dependencies(${PLINE_PREFIX}_link ${PLINE_DEPENDS})
+  add_dependencies(${PLINE_PREFIX}_opt ${PLINE_DEPENDS})
 
   llvmir_attach_executable(
     TARGET ${PLINE_PREFIX}_bc_exe
-    DEPENDS ${PLINE_PREFIX}_link)
-  add_dependencies(${PLINE_PREFIX}_bc_exe ${PLINE_PREFIX}_link)
+    DEPENDS ${PLINE_PREFIX}_opt)
+  add_dependencies(${PLINE_PREFIX}_bc_exe ${PLINE_PREFIX}_opt)
 
   # aggregate targets for pipeline
 
   list(APPEND INTERNAL_TARGET_LIST
-    ${PLINE_PREFIX}_link
+    ${PLINE_PREFIX}_opt
     ${PLINE_PREFIX}_bc_exe)
 
   add_dependencies(${PLINE_SUBTARGET} ${INTERNAL_TARGET_LIST})
 
   # export targets
 
-  set(${PLINE_MAIN_TARGET} "${PLINE_PREFIX}_link" PARENT_SCOPE)
+  set(${PLINE_MAIN_TARGET} "${PLINE_PREFIX}_opt" PARENT_SCOPE)
 
   if(PLINE_TARGET_LIST)
     list(APPEND INTERNAL_TARGET_LIST ${PLINE_SUBTARGET})
