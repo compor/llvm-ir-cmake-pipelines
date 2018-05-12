@@ -59,9 +59,9 @@ The operation of the project is influenced and controlled by these `cmake` varia
 
     ```cmake
     cmake \
-    -DLLVMIR_PIPELINES_TO_INCLUDE="basicbc;loopc14n" \
+    -DLLVMIR_PIPELINES_TO_INCLUDE="genbc;linkbc;loopc14n" \
     -DLLVMIR_PIPELINES_COMPOUND="mygroup" \
-    -DLLVMIR_PIPELINES_COMPOUND_MYGROUP="basicbc;loopc14n" \
+    -DLLVMIR_PIPELINES_COMPOUND_MYGROUP="genbc;linkbc;loopc14n" \
     [path to source dir]
     ```
 

@@ -105,7 +105,7 @@ README document. We can call explicitly `myopts()` command in our `CMakeLists.tx
 
 ```cmake
 cmake \
--DLLVMIR_PIPELINES_TO_INCLUDE="basicbc;myopts" \
+-DLLVMIR_PIPELINES_TO_INCLUDE="genbc;linkbc;myopts" \
 ... \
 [path to source dir]
 ```
@@ -115,9 +115,9 @@ configure our project with:
 
 ```cmake
 cmake \
--DLLVMIR_PIPELINES_TO_INCLUDE="basicbc;myopts" \
+-DLLVMIR_PIPELINES_TO_INCLUDE="genbc;linkbc;myopts" \
 -DLLVMIR_PIPELINES_COMPOUND="mygroup" \
--DLLVMIR_PIPELINES_COMPOUND_MYGROUP="basicbc;myopts" \
+-DLLVMIR_PIPELINES_COMPOUND_MYGROUP="genbc;linkbc;myopts" \
 ... \
 [path to source dir]
 ```
