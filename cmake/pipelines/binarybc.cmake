@@ -15,36 +15,15 @@ function(binarybc)
 
   # pipeline targets and chaining
 
-  get_target_property(SOURCE_FILES ${PLINE_DEPENDS} LLVMIR_FILES)
-  list(LENGTH SOURCE_FILES FILES_NUMBER)
-
-  if(FILES_NUMBER GREATER 1)
-    llvmir_attach_link_target(
-      TARGET ${PLINE_PREFIX}_link
-      DEPENDS ${PLINE_DEPENDS})
-    add_dependencies(${PLINE_PREFIX}_link ${PLINE_DEPENDS})
-
-    llvmir_attach_executable(
-      TARGET ${PLINE_PREFIX}_link_out
-      DEPENDS ${PLINE_PREFIX}_link)
-    add_dependencies(${PLINE_PREFIX}_link_out ${PLINE_PREFIX}_link)
-  else()
-    llvmir_attach_executable(
-      TARGET ${PLINE_PREFIX}_link_out
-      DEPENDS ${PLINE_DEPENDS})
-    add_dependencies(${PLINE_PREFIX}_link_out ${PLINE_DEPENDS})
-  endif()
+  llvmir_attach_executable(
+    TARGET ${PLINE_PREFIX}_link_out
+    DEPENDS ${PLINE_DEPENDS})
+  add_dependencies(${PLINE_PREFIX}_link_out ${PLINE_DEPENDS})
 
   # aggregate targets for pipeline
 
-  if(FILES_NUMBER GREATER 1)
-    list(APPEND INTERNAL_TARGET_LIST
-      ${PLINE_PREFIX}_link
-      ${PLINE_PREFIX}_link_out)
-  else()
-    list(APPEND INTERNAL_TARGET_LIST
-      ${PLINE_PREFIX}_link_out)
-  endif()
+  list(APPEND INTERNAL_TARGET_LIST
+    ${PLINE_PREFIX}_link_out)
 
   add_dependencies(${PLINE_SUBTARGET} ${INTERNAL_TARGET_LIST})
 
