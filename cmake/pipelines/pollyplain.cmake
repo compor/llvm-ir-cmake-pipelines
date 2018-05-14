@@ -32,16 +32,10 @@ function(pollyplain)
     -polly-parallel)
   add_dependencies(${PLINE_PREFIX}_opt ${PLINE_DEPENDS})
 
-  llvmir_attach_executable(
-    TARGET ${PLINE_PREFIX}_bc_exe
-    DEPENDS ${PLINE_PREFIX}_opt)
-  add_dependencies(${PLINE_PREFIX}_bc_exe ${PLINE_PREFIX}_opt)
-
   # aggregate targets for pipeline
 
   list(APPEND INTERNAL_TARGET_LIST
-    ${PLINE_PREFIX}_opt
-    ${PLINE_PREFIX}_bc_exe)
+    ${PLINE_PREFIX}_opt)
 
   add_dependencies(${PLINE_SUBTARGET} ${INTERNAL_TARGET_LIST})
 
