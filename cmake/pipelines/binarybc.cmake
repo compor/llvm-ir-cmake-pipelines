@@ -15,21 +15,32 @@ function(binarybc)
 
   # pipeline targets and chaining
 
-  llvmir_attach_executable(
-    TARGET ${PLINE_PREFIX}_link_out
-    DEPENDS ${PLINE_DEPENDS})
-  add_dependencies(${PLINE_PREFIX}_link_out ${PLINE_DEPENDS})
+  get_target_property(LLVMIR_EXTERNAL_TYPE
+    ${PLINE_DEPENDS} LLVMIR_EXTERNAL_TYPE)
+
+  if(LLVMIR_EXTERNAL_TYPE STREQUAL "EXECUTABLE")
+    llvmir_attach_executable(
+      TARGET ${PLINE_PREFIX}_bin
+      DEPENDS ${PLINE_DEPENDS})
+  else()
+    llvmir_attach_library(
+      TARGET ${PLINE_PREFIX}_bin
+      DEPENDS ${PLINE_DEPENDS})
+    set_target_properties(${PLINE_PREFIX}_bin
+      PROPERTIES TYPE ${LLVMIR_EXTERNAL_TYPE})
+  endif()
+  add_dependencies(${PLINE_PREFIX}_bin ${PLINE_DEPENDS})
 
   # aggregate targets for pipeline
 
   list(APPEND INTERNAL_TARGET_LIST
-    ${PLINE_PREFIX}_link_out)
+    ${PLINE_PREFIX}_bin)
 
   add_dependencies(${PLINE_SUBTARGET} ${INTERNAL_TARGET_LIST})
 
   # export targets
 
-  set(${PLINE_MAIN_TARGET} "${PLINE_PREFIX}_link_out" PARENT_SCOPE)
+  set(${PLINE_MAIN_TARGET} "${PLINE_PREFIX}_bin" PARENT_SCOPE)
 
   if(PLINE_TARGET_LIST)
     list(APPEND INTERNAL_TARGET_LIST ${PLINE_SUBTARGET})
