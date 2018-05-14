@@ -27,7 +27,7 @@ function(genbc)
 
   add_dependencies(${PLINE_SUBTARGET} ${INTERNAL_TARGET_LIST})
 
-  # export targets
+  # expose targets
 
   set(${PLINE_MAIN_TARGET} "${PLINE_PREFIX}_bc" PARENT_SCOPE)
 

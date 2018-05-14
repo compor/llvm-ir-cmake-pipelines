@@ -39,7 +39,7 @@ function(pollyplain)
 
   add_dependencies(${PLINE_SUBTARGET} ${INTERNAL_TARGET_LIST})
 
-  # export targets
+  # expose targets
 
   set(${PLINE_MAIN_TARGET} "${PLINE_PREFIX}_opt" PARENT_SCOPE)
 
