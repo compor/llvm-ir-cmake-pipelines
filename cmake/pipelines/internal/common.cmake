@@ -62,3 +62,44 @@ function(pipeline_setup)
   set(PLINE_PREFIX "${PLINE_PREFIX}" PARENT_SCOPE)
 endfunction()
 
+function(install_llvmir_bc)
+  set(options)
+  set(oneValueArgs TARGET)
+  set(multiValueArgs)
+
+  cmake_parse_arguments(ILIB "${options}" "${oneValueArgs}"
+    "${multiValueArgs}" ${ARGN})
+
+  get_property(HAS_LLVMIR_DIR TARGET ${ILIB_TARGET} PROPERTY LLVMIR_DIR DEFINED)
+
+  if(NOT HAS_LLVMIR_DIR)
+    message(FATAL_ERROR "Target ${ILIB_TARGET} does not have LLVMIR_DIR \
+    property")
+  endif()
+
+  get_property(LLVMIR_DIR TARGET ${ILIB_TARGET} PROPERTY LLVMIR_DIR)
+
+  install(DIRECTORY ${LLVMIR_DIR}
+    DESTINATION .
+    COMPONENT llvmir_bc
+    USE_SOURCE_PERMISSIONS
+    EXCLUDE_FROM_ALL
+    OPTIONAL)
+endfunction()
+
+function(install_llvmir_binary)
+  set(options)
+  set(oneValueArgs TARGET)
+  set(multiValueArgs)
+
+  cmake_parse_arguments(ILIB "${options}" "${oneValueArgs}"
+    "${multiValueArgs}" ${ARGN})
+
+  install(TARGETS ${ILIB_TARGET}
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+    COMPONENT llvmir_binary
+    EXCLUDE_FROM_ALL
+    OPTIONAL)
+endfunction()
