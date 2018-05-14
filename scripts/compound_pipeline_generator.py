@@ -93,9 +93,10 @@ class CMakeCompoundPipelineGenerator:
             if not len(e):
                 raise ValueError('Pipeline name is empty')
 
-        unique_pipelines = {x for x in pipelines}
-        if not len(unique_pipelines) == len(pipelines):
-            raise ValueError('Pipeline specified more than once')
+        if kwargs['unique']:
+            unique_pipelines = {x for x in pipelines}
+            if not len(unique_pipelines) == len(pipelines):
+                raise ValueError('Pipeline specified more than once')
 
         repeat_subs['pipeline'] = pipelines[0]
         repeat_subs['depends'] = 'TRGT0'
@@ -138,6 +139,11 @@ if __name__ == '__main__':
         '-f',
         dest='file',
         help='File name of output. Use stdout if not specified')
+    parser.add_argument(
+        '-u',
+        dest='unique',
+        action='store_true',
+        help='Disallow multiple occurences of a pipeline')
 
     args = vars(parser.parse_args())
 
@@ -155,7 +161,8 @@ if __name__ == '__main__':
     g = CMakeCompoundPipelineGenerator(preamble, repeat, postamble)
     txt = g.generate(
         compound_pipeline=args['compound_pipeline'],
-        pipelines=args['pipelines'])
+        pipelines=args['pipelines'],
+        unique=args['unique'])
 
     outfile = sys.stdout
     if args['file']:
