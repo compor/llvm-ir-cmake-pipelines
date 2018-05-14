@@ -1,6 +1,6 @@
 # cmake file
 
-# pipeline that attaches to source level targets and produces LLVM IR
+# pipeline that attaches to source level targets and adds install directives
 
 set(_THIS_LIST_DIR "${CMAKE_CURRENT_LIST_DIR}")
 
