@@ -11,12 +11,6 @@ include(${_THIS_LIST_DIR}/internal/common.cmake)
 
 find_package(pedigree CONFIG REQUIRED)
 
-get_target_property(_PEDIGREE_PASS_TYPE LLVMPedigreePass TYPE)
-
-if(NOT _PEDIGREE_PASS_TYPE STREQUAL "MODULE_LIBRARY")
-  message(FATAL_ERROR "package has unexpected TYPE: ${_PEDIGREE_PASS_TYPE}")
-endif()
-
 function(pedigree)
   # CAUTION
   # function name and NAME provided below are required to match in order for
@@ -24,29 +18,35 @@ function(pedigree)
   # a function's name
   pipeline_setup(NAME "pedigree" ${ARGV})
 
-  # pipeline targets and chaining
-  get_target_property(_PEDIGREE_PASS_LOCATION LLVMPedigreePass LOCATION)
+  get_target_property(${NAME}_PASS_TYPE LLVMPedigreePass TYPE)
 
-  get_target_property(_PEDIGREE_PASS_DEPENDEE LLVMPedigreePass DEPENDEE)
-  set(_PEDIGREE_LOAD_CMDLINE_ARG "")
-  if(_PEDIGREE_PASS_DEPENDEE)
-    foreach(dep ${_PEDIGREE_PASS_DEPENDEE})
-      list(APPEND _PEDIGREE_LOAD_CMDLINE_ARG -load;${dep})
+  if(NOT ${NAME}_PASS_TYPE STREQUAL "MODULE_LIBRARY")
+    message(FATAL_ERROR "package has unexpected TYPE: ${${NAME}_PASS_TYPE}")
+  endif()
+
+  # pipeline targets and chaining
+  get_target_property(${NAME}_PASS_LOCATION LLVMPedigreePass LOCATION)
+
+  get_target_property(${NAME}_PASS_DEPENDEE LLVMPedigreePass DEPENDEE)
+  set(${NAME}_LOAD_CMDLINE_ARG "")
+  if(${NAME}_PASS_DEPENDEE)
+    foreach(dep ${${NAME}_PASS_DEPENDEE})
+      list(APPEND ${NAME}_LOAD_CMDLINE_ARG -load;${dep})
     endforeach()
   endif()
 
-  set(_PEDIGREE_OPTS_CMDLINE_ARG "")
+  set(${NAME}_OPTS_CMDLINE_ARG "")
   foreach(opt $ENV{PEDIGREE_OPTS})
-    list(APPEND _PEDIGREE_OPTS_CMDLINE_ARG ${opt})
+    list(APPEND ${NAME}_OPTS_CMDLINE_ARG ${opt})
   endforeach()
 
   llvmir_attach_opt_pass_target(
     TARGET ${PLINE_PREFIX}_opt
     DEPENDS ${PLINE_DEPENDS}
-    ${_PEDIGREE_LOAD_CMDLINE_ARG}
-    -load ${_PEDIGREE_PASS_LOCATION}
+    ${${NAME}_LOAD_CMDLINE_ARG}
+    -load ${${NAME}_PASS_LOCATION}
     -pedigree-pdg
-    ${_PEDIGREE_OPTS_CMDLINE_ARG})
+    ${${NAME}_OPTS_CMDLINE_ARG})
   add_dependencies(${PLINE_PREFIX}_opt ${PLINE_DEPENDS})
 
   # aggregate targets for pipeline
