@@ -17,35 +17,37 @@ function(pedigree)
   # things to work, since there is currently no programmatic way of accessing
   # a function's name
   pipeline_setup(NAME "pedigree" ${ARGV})
+  string(TOUPPER "${PLINE_NAME}" PLINE_NAME_UPPER)
 
-  get_target_property(${NAME}_PASS_TYPE LLVMPedigreePass TYPE)
+  set(PASS_TARGET LLVMPedigreePass)
+  get_target_property(${PLINE_NAME}_PASS_TYPE ${PASS_TARGET} TYPE)
 
-  if(NOT ${NAME}_PASS_TYPE STREQUAL "MODULE_LIBRARY")
-    message(FATAL_ERROR "package has unexpected TYPE: ${${NAME}_PASS_TYPE}")
+  if(NOT ${PLINE_NAME}_PASS_TYPE STREQUAL "MODULE_LIBRARY")
+    message(FATAL_ERROR "package has unexpected TYPE: ${${PLINE_NAME}_PASS_TYPE}")
   endif()
 
   # pipeline targets and chaining
-  get_target_property(${NAME}_PASS_LOCATION LLVMPedigreePass LOCATION)
+  get_target_property(${PLINE_NAME}_PASS_LOCATION ${PASS_TARGET} LOCATION)
 
-  get_target_property(${NAME}_PASS_DEPENDEE LLVMPedigreePass DEPENDEE)
-  set(${NAME}_LOAD_CMDLINE_ARG "")
-  if(${NAME}_PASS_DEPENDEE)
-    foreach(dep ${${NAME}_PASS_DEPENDEE})
-      list(APPEND ${NAME}_LOAD_CMDLINE_ARG -load;${dep})
+  get_target_property(${PLINE_NAME}_PASS_DEPENDEE ${PASS_TARGET} DEPENDEE)
+  set(${PLINE_NAME}_LOAD_CMDLINE_ARG "")
+  if(${PLINE_NAME}_PASS_DEPENDEE)
+    foreach(dep ${${PLINE_NAME}_PASS_DEPENDEE})
+      list(APPEND ${PLINE_NAME}_LOAD_CMDLINE_ARG -load;${dep})
     endforeach()
   endif()
 
-  set(${NAME}_OPTS_CMDLINE_ARG "")
-  foreach(opt $ENV{PEDIGREE_OPTS})
-    list(APPEND ${NAME}_OPTS_CMDLINE_ARG ${opt})
+  set(${PLINE_NAME}_OPTS_CMDLINE_ARG "")
+  foreach(opt $ENV{${PLINE_NAME_UPPER}_OPTIONS})
+    list(APPEND ${PLINE_NAME}_OPTS_CMDLINE_ARG ${opt})
   endforeach()
 
   llvmir_attach_opt_pass_target(
     TARGET ${PLINE_PREFIX}_opt
     DEPENDS ${PLINE_DEPENDS}
-    ${${NAME}_LOAD_CMDLINE_ARG}
-    -load ${${NAME}_PASS_LOCATION}
-    ${${NAME}_OPTS_CMDLINE_ARG})
+    ${${PLINE_NAME}_LOAD_CMDLINE_ARG}
+    -load ${${PLINE_NAME}_PASS_LOCATION}
+    ${${PLINE_NAME}_OPTS_CMDLINE_ARG})
   add_dependencies(${PLINE_PREFIX}_opt ${PLINE_DEPENDS})
 
   # aggregate targets for pipeline
