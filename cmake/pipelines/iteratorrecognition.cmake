@@ -9,17 +9,17 @@ set(_THIS_LIST_DIR "${CMAKE_CURRENT_LIST_DIR}")
 
 include(${_THIS_LIST_DIR}/internal/common.cmake)
 
-find_package(pedigree CONFIG REQUIRED)
+find_package(iteratorrecognition CONFIG REQUIRED)
 
-function(pedigree)
+function(iteratorrecognition)
   # CAUTION
   # function name and NAME provided below are required to match in order for
   # things to work, since there is currently no programmatic way of accessing
   # a function's name
-  pipeline_setup(NAME "pedigree" ${ARGV})
+  pipeline_setup(NAME "iteratorrecognition" ${ARGV})
   string(TOUPPER "${PLINE_NAME}" PLINE_NAME_UPPER)
 
-  set(PASS_TARGET LLVMPedigreePass)
+  set(PASS_TARGET LLVMIteratorRecognitionPass)
   get_target_property(${PLINE_NAME}_PASS_TYPE ${PASS_TARGET} TYPE)
 
   if(NOT ${PLINE_NAME}_PASS_TYPE STREQUAL "MODULE_LIBRARY")
