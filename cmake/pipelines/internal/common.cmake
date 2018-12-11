@@ -2,6 +2,34 @@
 
 include(CMakeParseArguments)
 
+function(pipeline_parse_dep_args)
+  set(options)
+  set(oneValueArgs PASS_TARGET OUT)
+  set(multiValueArgs)
+  cmake_parse_arguments(PLINE_PDA
+    "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+
+  # argument checks
+  if(NOT PLINE_PDA_PASS_TARGET)
+    message(FATAL_ERROR "missing PASS_TARGET target")
+  endif()
+
+  if(NOT PLINE_PDA_OUT)
+    message(FATAL_ERROR "missing OUT variable name")
+  endif()
+
+  get_target_property(PASS_DEPENDEES ${PLINE_PDA_PASS_TARGET} DEPENDEE)
+
+  set(LOAD_CMDLINE_ARG "")
+  if(PASS_DEPENDEES)
+    foreach(dep ${PASS_DEPENDEES})
+      list(APPEND LOAD_CMDLINE_ARG -load;${dep})
+    endforeach()
+  endif()
+
+  set(${PLINE_PDA_OUT} ${LOAD_CMDLINE_ARG} PARENT_SCOPE)
+endfunction()
+
 function(pipeline_setup)
   set(options ALL)
   set(oneValueArgs NAME DEPENDS MAIN_TARGET TARGET_LIST)

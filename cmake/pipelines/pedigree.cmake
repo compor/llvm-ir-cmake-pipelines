@@ -29,25 +29,19 @@ function(pedigree)
   # pipeline targets and chaining
   get_target_property(${PLINE_NAME}_PASS_LOCATION ${PASS_TARGET} LOCATION)
 
-  get_target_property(${PLINE_NAME}_PASS_DEPENDEE ${PASS_TARGET} DEPENDEE)
-  set(${PLINE_NAME}_LOAD_CMDLINE_ARG "")
-  if(${PLINE_NAME}_PASS_DEPENDEE)
-    foreach(dep ${${PLINE_NAME}_PASS_DEPENDEE})
-      list(APPEND ${PLINE_NAME}_LOAD_CMDLINE_ARG -load;${dep})
-    endforeach()
-  endif()
+  pipeline_parse_dep_args(PASS_TARGET ${PASS_TARGET} OUT LOAD_CMDLINE)
 
-  set(${PLINE_NAME}_OPTS_CMDLINE_ARG "")
+  set(${PLINE_NAME}_OPTIONS_CMDLINE "")
   foreach(opt $ENV{${PLINE_NAME_UPPER}_OPTIONS})
-    list(APPEND ${PLINE_NAME}_OPTS_CMDLINE_ARG ${opt})
+    list(APPEND ${PLINE_NAME}_OPTIONS_CMDLINE ${opt})
   endforeach()
 
   llvmir_attach_opt_pass_target(
     TARGET ${PLINE_PREFIX}_opt
     DEPENDS ${PLINE_DEPENDS}
-    ${${PLINE_NAME}_LOAD_CMDLINE_ARG}
+    ${LOAD_CMDLINE}
     -load ${${PLINE_NAME}_PASS_LOCATION}
-    ${${PLINE_NAME}_OPTS_CMDLINE_ARG})
+    ${${PLINE_NAME}_OPTIONS_CMDLINE})
   add_dependencies(${PLINE_PREFIX}_opt ${PLINE_DEPENDS})
 
   # aggregate targets for pipeline
