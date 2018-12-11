@@ -27,8 +27,8 @@ function(loopc14n_full)
     TARGET ${PLINE_PREFIX}_opt
     DEPENDS ${PLINE_PREFIX}_bc
     -mem2reg
-    -mergereturn
     -simplifycfg
+    -mergereturn
     -loop-simplify)
   add_dependencies(${PLINE_PREFIX}_opt ${PLINE_PREFIX}_bc)
 
