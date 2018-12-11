@@ -45,7 +45,6 @@ function(pedigree)
     DEPENDS ${PLINE_DEPENDS}
     ${${NAME}_LOAD_CMDLINE_ARG}
     -load ${${NAME}_PASS_LOCATION}
-    -pedigree-pdg
     ${${NAME}_OPTS_CMDLINE_ARG})
   add_dependencies(${PLINE_PREFIX}_opt ${PLINE_DEPENDS})
 
