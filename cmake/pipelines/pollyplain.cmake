@@ -14,7 +14,7 @@ function(pollyplain)
   # accessing a function's name
   pipeline_setup(NAME "pollyplain" ${ARGV})
 
-  if(NOT ENV{POLLYPLAIN_PASS_MODULE})
+  if(NOT DEFINED ENV{POLLYPLAIN_PASS_MODULE})
     message(FATAL_ERROR "pipeline ${PLINE_NAME} requires env variable: \
     POLLYPLAIN_PASS_MODULE")
   endif()
