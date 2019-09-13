@@ -25,6 +25,8 @@ function(pollyalt2)
     TARGET ${PLINE_PREFIX}_opt
     DEPENDS ${PLINE_DEPENDS}
     -load $ENV{POLLYALT2_PASS_MODULE}
+    -opt-remark-emitter
+    -pass-remarks-output=remarks.txt
     -polly-canonicalize
     -polly-process-unprofitable
     -polly-scops
